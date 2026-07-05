@@ -7,5 +7,7 @@
 # To list all registered routes, run the following command:
 #   bin/console debug:router
 
-controllers:
-    resource: routing.controllers
+auth:
+    path: /auth/register
+    controller: App\Controller\CreateUserAction
+    methods: POST
