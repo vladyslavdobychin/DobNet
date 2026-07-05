@@ -2,29 +2,28 @@
 
 namespace App\Services;
 
-use App\Entity\Email;
-use App\Entity\FirstName;
-use App\Entity\LastName;
-use App\Entity\Password;
 use App\Entity\User;
-use App\Entity\Username;
+use App\Repository\UserRepositoryInterface;
 use App\Requests\CreateUserRequest;
 
 class CreateUserService
 {
-    public function __construct()
-    {
+    public function __construct(
+        private readonly UserRepositoryInterface $users,
+    ) {
     }
 
     public function execute(CreateUserRequest $request): User
     {
         $user = User::create(
-            new FirstName($request->getFirstName()),
-            new LastName($request->getLastName()),
-            new Email($request->getEmail()),
-            new Password($request->getPassword()),
-            new Username($request->getUsername())
+            $request->getFirstName(),
+            $request->getLastName(),
+            $request->getEmail(),
+            $request->getPassword(),
+            $request->getUsername()
         );
+
+        $this->users->save($user);
 
         return $user;
     }

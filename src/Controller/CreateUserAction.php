@@ -22,6 +22,12 @@ class CreateUserAction extends AbstractController
     {
         $result = $this->createUserService->execute($request);
 
-        return new JsonResponse($result);
+        return new JsonResponse([
+            'id' => $result->getId()->toRfc4122(),
+            'firstName' => $result->getFirstName()->value(),
+            'lastName' => $result->getLastName()->value(),
+            'email' => $result->getEmail()->value(),
+            'username' => $result->getUsername()->value(),
+        ]);
     }
 }

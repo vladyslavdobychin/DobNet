@@ -2,24 +2,43 @@
 
 namespace App\Entity;
 
+use App\Entity\Email;
+use App\Entity\FirstName;
+use App\Entity\LastName;
+use App\Entity\Password;
+use App\Entity\Username;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
+#[ORM\Entity]
 class User
 {
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
     private Uuid $id;
-    private FirstName $firstName;
-    private LastName $lastName;
-    private Email $email;
-    private Password $password;
-    private Username $username;
+
+    #[ORM\Column(type: 'string', length: 35)]
+    private string $firstName;
+
+    #[ORM\Column(type: 'string', length: 35)]
+    private string $lastName;
+
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    private string $email;
+
+    #[ORM\Column(type: 'string')]
+    private string $password;
+
+    #[ORM\Column(type: 'string', unique: true)]
+    private string $username;
 
     private function __construct(
         ?Uuid $id,
-        FirstName $firstName,
-        LastName $lastName,
-        Email $email,
-        Password $password,
-        Username $username,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $password,
+        string $username,
     ) {
         $this->id = $id ?? Uuid::v7();
         $this->firstName = $firstName;
@@ -30,20 +49,13 @@ class User
     }
 
     public static function create(
-        FirstName $firstName,
-        LastName $lastName,
-        Email $email,
-        Password $password,
-        Username $username
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $password,
+        string $username
     ): self {
-        return new self(
-            null,
-            $firstName,
-            $lastName,
-            $email,
-            $password,
-            $username,
-        );
+        return new self(null, $firstName, $lastName, $email, $password, $username);
     }
 
     public function getId(): Uuid
@@ -53,26 +65,26 @@ class User
 
     public function getFirstName(): FirstName
     {
-        return $this->firstName;
+        return new FirstName($this->firstName);
     }
 
     public function getLastName(): LastName
     {
-        return $this->lastName;
+        return new LastName($this->lastName);
     }
 
     public function getEmail(): Email
     {
-        return $this->email;
+        return new Email($this->email);
     }
 
     public function getPassword(): Password
     {
-        return $this->password;
+        return new Password($this->password);
     }
 
     public function getUsername(): Username
     {
-        return $this->username;
+        return new Username($this->username);
     }
 }
