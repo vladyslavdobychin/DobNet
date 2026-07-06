@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Email;
 use App\Entity\User;
 use App\Entity\Username;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,17 +26,12 @@ class DoctrineUserRepository implements UserRepositoryInterface
 
     public function existsByUsername(Username $username): bool
     {
-        return (bool) $this->em->getConnection()->executeQuery(
-            'SELECT COUNT(*) FROM users WHERE username = :username',
-            ['username' => $username->value()]
-        )->fetchOne();
-    }
-
-    public function existsByEmail(Email $email): bool
-    {
-        return (bool) $this->em->getConnection()->executeQuery(
-            'SELECT COUNT(*) FROM users WHERE email = :email',
-            ['email' => $email->value()]
-        )->fetchOne();
+        return (bool) $this->em->createQueryBuilder()
+            ->select('COUNT(u.id)')
+            ->from(User::class, 'u')
+            ->where('u.username = :username')
+            ->setParameter('username', $username->value())
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }
