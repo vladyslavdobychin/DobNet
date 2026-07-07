@@ -1,0 +1,8 @@
+/auth_service/vendor
+/auth_service/var
+/auth_service/.env
+.DS_Store
+.git
+.gitignore
+.dockerignore
+docker-compose.yml

@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  auth:
+    build:
+      context: .
+      dockerfile: auth_service/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./auth_service:/var/www/html
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: 1
+      DATABASE_URL: "sqlite:///%kernel.project_dir%/var/auth.db"
